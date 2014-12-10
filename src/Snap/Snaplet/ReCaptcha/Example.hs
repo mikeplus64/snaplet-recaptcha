@@ -1,5 +1,3 @@
-{-# LANGUAGE FlexibleInstances     #-}
-{-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE OverloadedStrings     #-}
 {-# LANGUAGE ScopedTypeVariables   #-}
 {-# LANGUAGE TemplateHaskell       #-}
@@ -12,6 +10,7 @@ module Snap.Snaplet.ReCaptcha.Example
     -- * Implementation
   , initBlog
   ) where
+
 import qualified Blaze.ByteString.Builder    as Blaze
 import           Heist
 import           Heist.Compiled
