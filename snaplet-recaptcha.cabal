@@ -2,7 +2,7 @@
 -- documentation, see http://haskell.org/cabal/users-guide/
 
 name:                snaplet-recaptcha
-version:             1.0
+version:             1.01
 synopsis:            A ReCAPTCHA verification snaplet with Heist integration and connection sharing.
 -- description:
 homepage:            http://github.com/mikeplus64/snaplet-recaptcha
