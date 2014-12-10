@@ -130,10 +130,11 @@ sampleTemplate =
  \  </body>\
  \</html>"
 
--- | Requires 'snaplets/heist/templates/sample.tpl' - a suggested version of which
--- is available in this module as 'sampleTemplate'.
+-- | Requires 'snaplets/heist/templates/sample.tpl' - a suggested version of
+-- which is available in this module as 'sampleTemplate'.
 --
--- This simple asks for your site and private key through stdin.
+-- This reads the ReCaptcha configuration as an ordinary snaplet config on the
+-- filesystem as per 'initReCaptcha' (@snaplets/recaptcha/devel.cfg@).
 initSample :: SnapletInit Sample Sample
 initSample = makeSnaplet "sample" "" Nothing $ do
   h <- nestSnaplet "heist"  heist     (heistInit "templates")
