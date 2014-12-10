@@ -19,7 +19,7 @@
 -- `http-conduit` and keeps connections alive (a maximum of 10). This is an
 -- important point in order to avoid denial of service attacks.
 --
--- See 'Snap.Snaplet.ReCaptcha.Example' and the docs provided here for example
+-- See "Snap.Snaplet.ReCaptcha.Example" and the docs provided here for example
 -- usage.
 --
 
