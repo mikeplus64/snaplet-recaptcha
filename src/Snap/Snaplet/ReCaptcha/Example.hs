@@ -1,6 +1,8 @@
 {-# LANGUAGE OverloadedStrings     #-}
 {-# LANGUAGE ScopedTypeVariables   #-}
 {-# LANGUAGE TemplateHaskell       #-}
+
+-- | Provides example usage for "Snap.Snaplet.ReCaptcha".
 module Snap.Snaplet.ReCaptcha.Example
   ( -- * Main
     main
@@ -47,9 +49,13 @@ instance HasReCaptcha Sample where
 instance HasHeist Sample where
   heistLens = subSnaplet heist
 
--- | A "blog" snaplet which reads hypothetical "posts" by their id, routing
--- GET on \/posts\/:id to display a post, and POST on \/posts\/:id to add a
--- comment to them. 
+-- | A "blog" snaplet which reads hypothetical "posts" by their id, and
+-- displays a comment form there.
+--
+-- @GET@ on @posts/:id@ → a comment form
+--
+-- @POST@ on @posts/:id@ → the comment poster which verifies that the user
+-- correctly responded to the captcha.
 initBlog :: forall b. (HasReCaptcha b, HasHeist b) => Snaplet (Heist b)
          -> SnapletInit b Blog
 initBlog heist = makeSnaplet "blog" "simple blog" Nothing $ do
@@ -81,7 +87,6 @@ initBlog heist = makeSnaplet "blog" "simple blog" Nothing $ do
   commentOnPost :: Handler b Blog ()
   commentOnPost = do
     Just postId  <- getParam "id"
-    Just captcha <- getPostParam "g-recaptcha-response"
     checkCaptcha <|> fail "Bad captcha response."
     -- if we reach here, the captcha was OK
     Just name    <- getPostParam "name"
