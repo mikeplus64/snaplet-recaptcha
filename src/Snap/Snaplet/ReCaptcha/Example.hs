@@ -48,10 +48,9 @@ instance HasReCaptcha Sample where
 instance HasHeist Sample where
   heistLens = subSnaplet heist
 
--- | A "blog" snaplet which reads hypothetical "posts" by their 'id', routing
+-- | A "blog" snaplet which reads hypothetical "posts" by their id, routing
 -- GET on \/posts\/:id to display a post, and POST on \/posts\/:id to add a
--- comment to them. For loose, useless definitions of "post" and "comment" -
--- this snaplet is only for demonstration purposes.
+-- comment to them. 
 initBlog :: forall b. (HasReCaptcha b, HasHeist b) => Snaplet (Heist b)
          -> SnapletInit b Blog
 initBlog heist = makeSnaplet "blog" "simple blog" Nothing $ do
