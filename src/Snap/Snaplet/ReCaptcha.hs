@@ -1,7 +1,7 @@
-{-# LANGUAGE DeriveDataTypeable        #-}
-{-# LANGUAGE MultiParamTypeClasses     #-}
-{-# LANGUAGE OverloadedStrings         #-}
-{-# LANGUAGE TemplateHaskell           #-}
+{-# LANGUAGE DeriveDataTypeable    #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE OverloadedStrings     #-}
+{-# LANGUAGE TemplateHaskell       #-}
 -- |
 -- Module      : Snap.Snaplet.ReCaptcha
 -- Copyright   : (c) Mike Ledger 2014
@@ -40,29 +40,29 @@ module Snap.Snaplet.ReCaptcha
   , recaptchaScript, recaptchaDiv
   ) where
 
-import qualified Blaze.ByteString.Builder    as Blaze
+import qualified Blaze.ByteString.Builder as Blaze
 import           Control.Applicative
 import           Control.Lens
-import           Control.Monad.Reader        (runReaderT)
+import           Control.Monad.Reader     (runReaderT)
 
-import qualified Data.Aeson                  as JSON
-import qualified Data.Aeson.TH               as JSON
-import qualified Data.ByteString.Char8       as BS
-import qualified Data.Configurator           as Conf
-import           Data.Text                   (Text)
-import           Data.Text.Encoding          (encodeUtf8)
+import qualified Data.Aeson            as JSON
+import qualified Data.Aeson.TH         as JSON
+import qualified Data.ByteString.Char8 as BS
+import qualified Data.Configurator     as Conf
+import           Data.Text             (Text)
+import           Data.Text.Encoding    (encodeUtf8)
 
-import           Data.Foldable               (fold, for_, toList)
-import           Data.Monoid
-import           Data.Typeable
+import Data.Foldable (fold, for_, toList)
+import Data.Monoid
+import Data.Typeable
 
-import           Heist
-import           Heist.Compiled
+import Heist
+import Heist.Compiled
 
 import qualified Network.HTTP.Client.Conduit as HTTP
 
-import           Snap
-import           Snap.Snaplet.Heist.Compiled
+import Snap
+import Snap.Snaplet.Heist.Compiled
 
 type PrivateKey = BS.ByteString
 type SiteKey    = BS.ByteString
@@ -167,7 +167,7 @@ addReCaptchaHeist heist site = addConfig heist $ mempty &~ do
     "recaptcha-div"    ## pureSplice id (return (recaptchaDiv site))
     "recaptcha-script" ## pureSplice id (return recaptchaScript)
 
--- | @<script src='https://www.google.com/recaptcha/api.js' async defer></script> @
+-- | @ \<script src='https://www.google.com/recaptcha/api.js' async defer\>\</script\> @
 recaptchaScript :: Blaze.Builder
 recaptchaScript = Blaze.fromByteString
   "<script src='https://www.google.com/recaptcha/api.js' async defer></script>"
