@@ -33,6 +33,7 @@ module Snap.Snaplet.ReCaptcha
   , withCaptcha
   , getCaptcha
   , getCaptchaDiv
+  , getCaptchaSiteKey
     -- * Types
   , Captcha(..)
   , PrivateKey
@@ -89,6 +90,7 @@ data ReCaptcha = ReCaptcha
   { connectionManager :: !HTTP.Manager
   , recaptchaQuery    :: !(UserIP -> UserAnswer -> HTTP.Request)
   , recaptchaHtmlDiv  :: !Blaze.Builder
+  , siteKey           :: !SiteKey
   , _cstate           :: !Captcha
   } deriving (Typeable)
 
@@ -130,6 +132,7 @@ initialiser mheist (site,key) = do
           , ("remoteip" , ip) ]
           req
     , recaptchaHtmlDiv = recaptchaDiv site
+    , siteKey          = site
     , _cstate          = Failure
     }
 
@@ -276,5 +279,10 @@ errorMsg err = do
   showTextList = BS.intercalate "/" . map encodeUtf8
 
 -- | Get the 'recaptchaDiv' for this 'ReCaptcha'. Useful inside a 'Handler'.
+--
+-- This is computed when the snaplet is first initialised.
 getCaptchaDiv :: HasReCaptcha b => Handler b c Blaze.Builder
 getCaptchaDiv = withTop' captchaLens (gets recaptchaHtmlDiv)
+
+getCaptchaSiteKey :: HasReCaptcha b => Handler b c SiteKey
+getCaptchaSiteKey = withTop' captchaLens (gets siteKey)
