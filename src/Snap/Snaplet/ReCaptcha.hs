@@ -1,4 +1,5 @@
 {-# LANGUAGE DeriveDataTypeable    #-}
+{-# LANGUAGE FlexibleContexts      #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE OverloadedStrings     #-}
 {-# LANGUAGE TemplateHaskell       #-}
@@ -31,6 +32,7 @@ module Snap.Snaplet.ReCaptcha
   , checkCaptcha
   , withCaptcha
   , getCaptcha
+  , getCaptchaDiv
     -- * Types
   , Captcha(..)
   , PrivateKey
@@ -86,6 +88,7 @@ data Captcha
 data ReCaptcha = ReCaptcha
   { connectionManager :: !HTTP.Manager
   , recaptchaQuery    :: !(UserIP -> UserAnswer -> HTTP.Request)
+  , siteKey           :: !SiteKey
   , _cstate           :: !Captcha
   } deriving (Typeable)
 
@@ -126,6 +129,7 @@ initialiser mheist (site,key) = do
           , ("response" , answer)
           , ("remoteip" , ip) ]
           req
+    , siteKey = site
     , _cstate = Failure
     }
 
@@ -176,6 +180,7 @@ recaptchaScript = Blaze.fromByteString
 recaptchaDiv :: BS.ByteString -> Blaze.Builder
 recaptchaDiv site = Blaze.fromByteString $!
   "<div class='g-recaptcha' data-sitekey='" <> site <> "'></div>"
+
 
 -- | Get the ReCaptcha result by querying Google's API.
 --
@@ -269,3 +274,7 @@ errorMsg err = do
  where
   showTextList :: [Text] -> BS.ByteString
   showTextList = BS.intercalate "/" . map encodeUtf8
+
+-- | Get the 'recaptchaDiv' for this 'ReCaptcha'. Useful inside a 'Handler'.
+getCaptchaDiv :: MonadState ReCaptcha m => m Blaze.Builder
+getCaptchaDiv = recaptchaDiv `liftM` gets siteKey
