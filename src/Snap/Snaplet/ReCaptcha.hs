@@ -276,5 +276,5 @@ errorMsg err = do
   showTextList = BS.intercalate "/" . map encodeUtf8
 
 -- | Get the 'recaptchaDiv' for this 'ReCaptcha'. Useful inside a 'Handler'.
-getCaptchaDiv :: MonadState ReCaptcha m => m Blaze.Builder
-getCaptchaDiv = recaptchaDiv `liftM` gets siteKey
+getCaptchaDiv :: HasReCaptcha b => Handler b c Blaze.Builder
+getCaptchaDiv = withTop' captchaLens (recaptchaDiv `liftM` gets siteKey)
