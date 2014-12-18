@@ -88,7 +88,7 @@ data Captcha
 data ReCaptcha = ReCaptcha
   { connectionManager :: !HTTP.Manager
   , recaptchaQuery    :: !(UserIP -> UserAnswer -> HTTP.Request)
-  , siteKey           :: !SiteKey
+  , recaptchaHtmlDiv  :: !Blaze.Builder
   , _cstate           :: !Captcha
   } deriving (Typeable)
 
@@ -129,8 +129,8 @@ initialiser mheist (site,key) = do
           , ("response" , answer)
           , ("remoteip" , ip) ]
           req
-    , siteKey = site
-    , _cstate = Failure
+    , recaptchaHtmlDiv = recaptchaDiv site
+    , _cstate          = Failure
     }
 
 -- | Initialise the 'ReCaptcha' snaplet. You are required to have "site_key" and
@@ -277,4 +277,4 @@ errorMsg err = do
 
 -- | Get the 'recaptchaDiv' for this 'ReCaptcha'. Useful inside a 'Handler'.
 getCaptchaDiv :: HasReCaptcha b => Handler b c Blaze.Builder
-getCaptchaDiv = withTop' captchaLens (recaptchaDiv `liftM` gets siteKey)
+getCaptchaDiv = withTop' captchaLens (gets recaptchaHtmlDiv)
