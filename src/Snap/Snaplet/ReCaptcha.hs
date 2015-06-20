@@ -43,29 +43,29 @@ module Snap.Snaplet.ReCaptcha
   , recaptchaScript, recaptchaDiv
   ) where
 
-import qualified Blaze.ByteString.Builder as Blaze
+import qualified Blaze.ByteString.Builder    as Blaze
 import           Control.Applicative
 import           Control.Lens
-import           Control.Monad.Reader     (runReaderT)
+import           Control.Monad.Reader
 
-import qualified Data.Aeson            as JSON
-import qualified Data.Aeson.TH         as JSON
-import qualified Data.ByteString.Char8 as BS
-import qualified Data.Configurator     as Conf
-import           Data.Text             (Text)
-import           Data.Text.Encoding    (encodeUtf8)
+import qualified Data.Aeson                  as JSON
+import qualified Data.Aeson.TH               as JSON
+import qualified Data.ByteString.Char8       as BS
+import qualified Data.Configurator           as Conf
+import           Data.Text                   (Text)
+import           Data.Text.Encoding          (encodeUtf8)
 
-import Data.Foldable (fold, for_, toList)
-import Data.Monoid
-import Data.Typeable
+import           Data.Foldable               (fold, for_, toList)
+import           Data.Monoid
+import           Data.Typeable
 
-import Heist
-import Heist.Compiled
+import           Heist
+import           Heist.Compiled
 
 import qualified Network.HTTP.Client.Conduit as HTTP
 
-import Snap
-import Snap.Snaplet.Heist.Compiled
+import           Snap
+import           Snap.Snaplet.Heist.Compiled
 
 type PrivateKey = BS.ByteString
 type SiteKey    = BS.ByteString
@@ -208,8 +208,8 @@ getCaptcha = do
   mresponse <- getPostParam "g-recaptcha-response"
   case mresponse of
     Just answer -> withTop' captchaLens $ do
-      manager  <- gets connectionManager
-      getQuery <- gets recaptchaQuery
+      manager  <- asks connectionManager
+      getQuery <- asks recaptchaQuery
       remoteip <- getsRequest rqRemoteAddr
       response <- runReaderT (HTTP.httpLbs (getQuery remoteip answer)) manager
       -- The reply is a JSON object looking like
@@ -282,7 +282,7 @@ errorMsg err = do
 --
 -- This is computed when the snaplet is first initialised.
 getCaptchaDiv :: HasReCaptcha b => Handler b c Blaze.Builder
-getCaptchaDiv = withTop' captchaLens (gets recaptchaHtmlDiv)
+getCaptchaDiv = withTop' captchaLens (asks recaptchaHtmlDiv)
 
 getCaptchaSiteKey :: HasReCaptcha b => Handler b c SiteKey
-getCaptchaSiteKey = withTop' captchaLens (gets siteKey)
+getCaptchaSiteKey = withTop' captchaLens (asks siteKey)

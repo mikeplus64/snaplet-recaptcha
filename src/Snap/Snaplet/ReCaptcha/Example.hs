@@ -1,6 +1,6 @@
-{-# LANGUAGE OverloadedStrings     #-}
-{-# LANGUAGE ScopedTypeVariables   #-}
-{-# LANGUAGE TemplateHaskell       #-}
+{-# LANGUAGE OverloadedStrings   #-}
+{-# LANGUAGE ScopedTypeVariables #-}
+{-# LANGUAGE TemplateHaskell     #-}
 
 -- | Provides example usage for "Snap.Snaplet.ReCaptcha".
 module Snap.Snaplet.ReCaptcha.Example
@@ -21,7 +21,9 @@ import           Snap
 import           Snap.Snaplet.Heist.Compiled
 import           Snap.Snaplet.ReCaptcha
 
+import           Control.Applicative
 import           Control.Lens
+import           Control.Monad.Trans
 
 import qualified Data.ByteString.Char8       as BS
 import           Data.Monoid
